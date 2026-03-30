@@ -1,83 +1,53 @@
-## Frontend Take-Home Project: AI Research Assistant
-
-Build a small React + TypeScript app that lets a user ask a question and receive a streamed assistant response.
-
-### Requirements
-
-Your app should include:
-
-* a text input for the user’s question
-* a conversation view
-* a way to display streamed assistant output progressively
-* basic loading and error states
-
-### Constraints
-
-* use React and TypeScript - styling and frameworks
-* timebox your work to about 1–2 hours
-* you may use real APIs, mocked responses, or a local simulation
-* some requirements are intentionally ambiguous; make reasonable product decisions
-
-### Deliverables
-
-* runnable source code
-* a short README explaining:
-
-  * how to run the app
-  * assumptions you made
-  * tools you used
-  * what you’d improve with more time
-
-### Optional bonuses
-
-* support cancel/retry during streaming
-* visualize tool calls, agent steps
-* use an MCP-style tool interface
-* render citations or structured outputs
-* persist conversation state
-* responsive/mobile-friendly design
-
-### What we’re evaluating
-
-* React and TypeScript fundamentals
-* async and streaming UI patterns
-* code quality and organization
-* product judgment under ambiguity
-* ability to work with newer AI-oriented interaction patterns
-
-### Here's a sample event type to get you started
-
-```ts
-type StreamEvent =
-  | { type: "status"; message: string }
-  | { type: "text"; content: string }
-  | { type: "tool_start"; tool: string }
-  | { type: "tool_result"; tool: string; result: string }
-  | { type: "citation"; title: string; url: string }
-  | { type: "done" }
-  | { type: "error"; message: string };
-```
-
-## Repo info
-
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app). It's intentionally bare bones to give you the flexibility to choose your own tools. Please fork the repo and send us a link to the fork when you're done.
+# Frontend Take-Home Project: AI Research Assistant (Celena Toon)
 
 ## Getting Started
 
-First, run the development server:
+First, install the dependencies:
+
+```bash
+npm install
+```
+
+Then run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Note: This project uses `msw` to mock calls to an LLM API. This should already be set up so you won't need to start it yourself. You should be able to see `MSW [mocking enabled]` in the browser console.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To see the error state, you can hit the "Stop" button. It'll abort the request and display an error.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Assumptions
+
+### Technical
+
+* This project was bootstrapped with React 19, so I didn't worry about making sure I memoized callbacks
+* Responses will be returned within 500 ms (the mocked API call returns responses randomly between 0 - 500ms)
+
+### Product / Design
+
+* It should look like a user-friendly chat app
+* User should be able to differentiate their input from the AI assistant responses
+  - user messages render on the right with a gray background
+  - If the user input spans the whole width of the chat, there's a small margin to the left so it doesn't stretch all the way so it's easier to differentiate user vs assistant messages
+* The page should scroll along as the streamed response is rendered
+* The user textarea should grow if the user types more than one line of text
+
+## Tools
+
+* `msw` - Mock service worker library to mock event streaming. The `public/mockServiceWorker.js` file was generated using a command from `msw` during initial setup
+* Cursor - I used AI to help generate the mock api, and the `useChat.tsx` hook
+* I kept some of the styles provided from the boilerplate code provided and just worked on top of it to save time
+
+## Improvements
+
+* Move `parseStream` function into a `helpers.ts` file for cleaner code and easier automated testing
+* More detailed comments and documentation, especially for the `useChat` hook that contains the majority of the logic
+* Automated testing
+* Clean up
+  - CSS, some elements like the ones displaying the user and assistant messages have common styles that could be consolidated and made into more generic and reusable classes
+  - ordering of props (alphabetical order)
+  - ordering of imports in files
+* Render the returned markdown into actual styles
+* Make the user experience a little more fun, like adding animations to the loading state
