@@ -44,6 +44,7 @@ To see the error state, you can hit the "Stop" button. It'll abort the request a
 
 * Move `parseStream` function into a `helpers.ts` file for cleaner code and easier automated testing
 * More detailed comments and documentation, especially for the `useChat` hook that contains the majority of the logic
+* More specific and actionable error states
 * Automated testing
 * Clean up
   - CSS, some elements like the ones displaying the user and assistant messages have common styles that could be consolidated and made into more generic and reusable classes
